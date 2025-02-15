@@ -28,3 +28,7 @@ export const deleteDepartmentApi = (ids: string[] | number[]) => {
 export const getDepartmentTableApi = (params: any) => {
   return request.get({ url: '/mock/department/table/list', params })
 }
+
+export const exportDepartmentApi = (ids: string[] | number[]) => {
+  return request.post({ url: '/department/export', data: { ids } })
+}

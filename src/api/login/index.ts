@@ -1,5 +1,5 @@
 import request from '@/axios'
-import type { UserType } from './types'
+import type { UserType, UserRegisterType } from './types'
 
 interface RoleParams {
   roleName: string
@@ -7,6 +7,10 @@ interface RoleParams {
 
 export const loginApi = (data: UserType): Promise<IResponse<UserType>> => {
   return request.post({ url: '/mock/user/login', data })
+}
+
+export const registerApi = (data: UserRegisterType): Promise<IResponse<UserType>> => {
+  return request.post({ url: '/mock/user/register', data })
 }
 
 export const loginOutApi = (): Promise<IResponse> => {

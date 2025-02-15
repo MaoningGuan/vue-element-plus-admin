@@ -7,11 +7,14 @@ import { ElInput, FormRules } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
 import { BaseButton } from '@/components/Button'
 import { IAgree } from '@/components/IAgree'
+import { UserRegisterType } from '@/api/login/types'
+import { registerApi } from '@/api/login'
+import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['to-login'])
 
 const { formRegister, formMethods } = useForm()
-const { getElFormExpose } = formMethods
+const { getElFormExpose, getFormData } = formMethods
 
 const { t } = useI18n()
 
@@ -194,9 +197,19 @@ const loginRegister = async () => {
   const formRef = await getElFormExpose()
   formRef?.validate(async (valid) => {
     if (valid) {
+      loading.value = true
+      const formData = await getFormData<UserRegisterType>()
+      console.log(formData)
       try {
-        loading.value = true
-        toLogin()
+        const res = await registerApi(formData)
+        console.log('res of register')
+        console.log(res)
+        if (res) {
+          ElMessage.success('注册成功')
+          toLogin()
+        } else {
+          ElMessage.success('注册失败。两次密码不一致。')
+        }
       } finally {
         loading.value = false
       }
@@ -206,6 +219,9 @@ const loginRegister = async () => {
 </script>
 
 <template>
+  <div style="max-width: 600px">
+    <el-alert title="Success alert" type="success" show-icon />
+  </div>
   <Form
     :schema="schema"
     :rules="rules"
@@ -216,3 +232,13 @@ const loginRegister = async () => {
     @register="formRegister"
   />
 </template>
+
+<style scoped>
+.el-alert {
+  margin: 20px 0 0;
+}
+
+.el-alert:first-child {
+  margin: 0;
+}
+</style>

@@ -86,5 +86,18 @@ export default [
         data: null
       }
     }
+  },
+  // 注册接口
+  {
+    url: '/mock/user/register',
+    method: 'post',
+    timeout,
+    response: ({ body }) => {
+      console.log(body)
+      return {
+        code: 0,
+        message: '注册失败，两次密码不一致'
+      }
+    }
   }
 ]

@@ -3,13 +3,14 @@ import { ContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Dialog } from '@/components/Dialog'
 import { useI18n } from '@/hooks/web/useI18n'
-import { ElTag } from 'element-plus'
+import { ElTag, ElMessage } from 'element-plus'
 import { Table } from '@/components/Table'
 import {
   getDepartmentApi,
   getDepartmentTableApi,
   saveDepartmentApi,
-  deleteDepartmentApi
+  deleteDepartmentApi,
+  exportDepartmentApi
 } from '@/api/department'
 import type { DepartmentItem } from '@/api/department/types'
 import { useTable } from '@/hooks/web/useTable'
@@ -18,6 +19,7 @@ import Write from './components/Write.vue'
 import Detail from './components/Detail.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { BaseButton } from '@/components/Button'
+import axios from 'axios'
 
 const ids = ref<string[]>([])
 
@@ -47,6 +49,14 @@ const setSearchParams = (params: any) => {
   searchParams.value = params
   getList()
 }
+
+// const refreshData = () => {
+//   setInterval(() => {
+//     getList()
+//   }, 2000)
+// }
+
+// refreshData()
 
 const { t } = useI18n()
 
@@ -212,8 +222,8 @@ const crudSchemas = reactive<CrudSchema[]>([
         default: (data: any) => {
           return (
             <>
-              <BaseButton type="primary" onClick={() => action(data.row, 'edit')}>
-                {t('exampleDemo.edit')}
+              <BaseButton type="primary" onClick={() => downloadData(data.row)}>
+                {t('exampleDemo.download')}
               </BaseButton>
               <BaseButton type="success" onClick={() => action(data.row, 'detail')}>
                 {t('exampleDemo.detail')}
@@ -243,6 +253,47 @@ const AddAction = () => {
   currentRow.value = null
   dialogVisible.value = true
   actionType.value = ''
+}
+
+const downloadData = async (row: DepartmentItem | null) => {
+  const elTableExpose = await getElTableExpose()
+  ids.value = row
+    ? [row.id]
+    : elTableExpose?.getSelectionRows().map((v: DepartmentItem) => v.id) || []
+
+  const res = await exportDepartmentApi(unref(ids)).finally(() => {})
+  if (res.code !== 0) {
+    return
+  }
+  const downloadLink = res.data.downloadLink
+  console.log(downloadLink)
+  try {
+    const response = await axios.get(`http://127.0.0.1:5000/department/download/${downloadLink}`, {
+      // 指定响应类型为 Blob
+      responseType: 'blob'
+    })
+
+    // 创建Blob对象
+    const blob = new Blob([response.data], { type: response.headers['content-type'] })
+
+    // 创建一个链接
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    // 设置下载文件名
+    link.setAttribute('download', downloadLink)
+    document.body.appendChild(link)
+
+    // 触发下载
+    link.click()
+
+    // 清理
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.error('文件下载失败', error)
+    ElMessage.error('文件下载失败，请重试')
+  }
 }
 
 const delLoading = ref(false)

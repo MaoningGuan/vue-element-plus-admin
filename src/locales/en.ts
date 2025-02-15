@@ -520,7 +520,8 @@ export default {
     important: 'Important',
     content: 'Content',
     save: 'Save',
-    detail: 'Detail'
+    detail: 'Detail',
+    download: 'Download'
   },
   userDemo: {
     title: 'User management',

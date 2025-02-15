@@ -9,3 +9,9 @@ export interface UserType {
   role: string
   roleId: string
 }
+
+export interface UserRegisterType {
+  username: string
+  password: string
+  check_password: string
+}

@@ -679,81 +679,40 @@ const adminList = [
   }
 ]
 
-const testList: string[] = [
-  '/dashboard',
-  '/dashboard/analysis',
-  '/dashboard/workplace',
-  'external-link',
-  'https://element-plus-admin-doc.cn/',
-  '/guide',
-  '/guide/index',
-  '/components',
-  '/components/form',
-  '/components/form/default-form',
-  '/components/form/use-form',
-  '/components/form/ref-form',
-  '/components/table',
-  '/components/table/default-table',
-  '/components/table/use-table',
-  '/components/table/tree-table',
-  '/components/table/table-image-preview',
-  '/components/table/table-video-preview',
-  '/components/table/ref-table',
-  '/components/table/card-table',
-  '/components/editor-demo',
-  '/components/editor-demo/editor',
-  '/components/editor-demo/json-editor',
-  '/components/editor-demo/code-editor',
-  '/components/search',
-  '/components/descriptions',
-  '/components/image-viewer',
-  '/components/dialog',
-  '/components/icon',
-  '/components/iconPicker',
-  '/components/echart',
-  '/components/count-to',
-  '/components/qrcode',
-  '/components/highlight',
-  '/components/infotip',
-  '/components/input-password',
-  '/components/waterfall',
-  '/components/image-cropping',
-  '/components/video-player',
-  '/components/avatars',
-  '/components/i-agree',
-  'function',
-  '/function/multiple-tabs',
-  '/function/multiple-tabs-demo/:id',
-  '/function/request',
-  '/function/test',
-  '/hooks',
-  '/hooks/useWatermark',
-  '/hooks/useTagsView',
-  '/hooks/useValidator',
-  '/hooks/useCrudSchemas',
-  '/hooks/useClipboard',
-  '/hooks/useNetwork',
-  '/level',
-  '/level/menu1',
-  '/level/menu1/menu1-1',
-  '/level/menu1/menu1-1/menu1-1-1',
-  '/level/menu1/menu1-2',
-  '/level/menu2',
-  '/example',
-  '/example/example-dialog',
-  '/example/example-page',
-  '/example/example-add',
-  '/example/example-edit',
-  '/example/example-detail',
-  '/authorization',
-  '/authorization/department',
-  '/authorization/user',
-  '/authorization/role',
-  '/authorization/menu',
-  '/error',
-  '/error/404-demo',
-  '/error/403-demo',
-  '/error/500-demo'
+const testList = [
+  {
+    path: '/dashboard',
+    component: '#',
+    redirect: '/dashboard/analysis',
+    name: 'Dashboard',
+    meta: {
+      title: 'router.dashboard',
+      icon: 'vi-ant-design:dashboard-filled',
+      alwaysShow: true
+    },
+    children: [
+      {
+        path: 'analysis',
+        component: 'views/Dashboard/Analysis',
+        name: 'Analysis',
+        meta: {
+          title: 'router.analysis',
+          noCache: true,
+          affix: true
+        }
+      },
+      {
+        path: 'workplace',
+        component: 'views/Dashboard/Workplace',
+        name: 'Workplace',
+        meta: {
+          title: 'router.workplace',
+          noCache: true,
+          affix: true
+        }
+      }
+    ]
+  }
 ]
 
 const List: any[] = []

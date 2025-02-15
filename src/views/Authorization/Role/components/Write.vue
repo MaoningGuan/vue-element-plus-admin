@@ -154,7 +154,10 @@ const submit = async () => {
       return checkedKeys.includes(item.id)
     })
     formData.menu = data || []
+    console.log('11111')
     console.log(formData)
+    formData.status = 0
+    console.log('22222')
     return formData
   }
 }
@@ -163,6 +166,9 @@ watch(
   () => props.currentRow,
   (currentRow) => {
     if (!currentRow) return
+    console.log('333333')
+    console.log(currentRow)
+    console.log('4444')
     setValues(currentRow)
   },
   {
